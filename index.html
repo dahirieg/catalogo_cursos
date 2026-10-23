@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INM RD - Módulo de Catálogo y Programación Académica</title>
+    <title>INM RD - Módulo Académico</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -19,10 +19,10 @@
                         inm: {
                             navy: '#0B2545',
                             blue: '#134074',
-                            lightBlue: '#8DA9C4',
-                            accent: '#C5A059', // Dorado institucional
-                            bg: '#F4F7FA',
-                            darkText: '#1D2A44',
+                            accent: '#C5A059',
+                            light: '#EEF4F8',
+                            border: '#CBD5E1',
+                            cardBg: '#F8FAFC'
                         }
                     },
                     fontFamily: {
@@ -34,504 +34,433 @@
     </script>
 
     <style>
-        /* CSS para Efecto Flip 3D de las Tarjetas */
+        /* 3D Flip Card Custom Styles */
         .perspective-1000 {
             perspective: 1000px;
         }
-
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: left;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        .transform-style-3d {
             transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .flip-card:hover .flip-card-inner, 
-        .flip-card.flipped .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
+        .backface-hidden {
             backface-visibility: hidden;
-            border-radius: 0.75rem; /* rounded-xl */
+            -webkit-backface-visibility: hidden;
         }
-
-        .flip-card-back {
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .group:hover .group-hover\:rotate-y-180 {
             transform: rotateY(180deg);
         }
 
-        /* Scrollbar personalizada del módulo */
-        .inm-module ::-webkit-scrollbar {
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
-        .inm-module ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
         }
-        .inm-module ::-webkit-scrollbar-thumb {
-            background: #134074;
-            border-radius: 4px;
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* Modal Animation */
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(15px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-animate {
+            animation: modalFadeIn 0.25s ease-out forwards;
         }
     </style>
 </head>
-<body class="bg-transparent text-inm-darkText font-sans p-2 sm:p-4 antialiased">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased p-0 m-0">
 
-    <!-- CONTENEDOR PRINCIPAL EMBEBIBLE (MÓDULO INM) -->
-    <div class="inm-module max-w-7xl mx-auto bg-inm-bg border border-gray-200 rounded-2xl shadow-sm overflow-hidden my-2">
+    <!-- CONTENEDOR PRINCIPAL EMBEBIBLE PARA WORDPRESS -->
+    <div id="inm-academic-module" class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 my-2 bg-slate-50 rounded-xl">
 
-        <!-- NAVEGACIÓN Y CABECERA INTERNA DEL MÓDULO -->
-        <div class="bg-gradient-to-r from-inm-navy via-inm-blue to-inm-navy text-white p-5 sm:p-6 border-b-4 border-inm-accent">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                
-                <!-- Título del Módulo -->
+        <!-- NAVEGACIÓN INTERNA DEL MÓDULO -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
-                    <span class="inline-block px-3 py-0.5 bg-inm-accent/20 border border-inm-accent/40 text-inm-accent text-[11px] font-bold rounded-full uppercase tracking-wider mb-1.5">
-                        Escuela Nacional de Migración - INM RD
-                    </span>
-                    <h2 id="module-title" class="text-xl sm:text-2xl font-bold tracking-tight">Catálogo Académico</h2>
-                    <p id="module-subtitle" class="text-xs sm:text-sm text-gray-200 mt-1 max-w-xl">
-                        Explora los ejes temáticos, cursos, diplomados y talleres del Instituto Nacional de Migración.
-                    </p>
+                    <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-inm-blue/10 text-inm-blue mb-1">Oferta Formativa Institucional</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-inm-navy">Oferta Académica</h2>
                 </div>
-
-                <!-- Botones / Pestañas de Navegación Interna -->
-                <div class="inline-flex p-1.5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 self-start md:self-center">
-                    <button onclick="switchTab('catalogo')" id="tab-catalogo" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 bg-inm-accent text-inm-navy font-bold shadow">
-                        <i class="fa-solid fa-book-open"></i> Catálogo Académico
+                
+                <!-- Pestañas de Navegación -->
+                <div class="flex bg-slate-100 p-1 rounded-lg self-start md:self-auto border border-slate-200/80">
+                    <button id="tab-catalogo" onclick="switchView('catalogo')" class="flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 bg-white text-inm-navy shadow-sm">
+                        <i class="fa-solid fa-book-open text-inm-blue"></i>
+                        <span>Catálogo Académico</span>
                     </button>
-                    <button onclick="switchTab('programacion')" id="tab-programacion" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-white hover:bg-white/10">
-                        <i class="fa-solid fa-calendar-days"></i> Programación Académica
+                    <button id="tab-programacion" onclick="switchView('programacion')" class="flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 text-slate-600 hover:text-inm-navy">
+                        <i class="fa-solid fa-calendar-days text-slate-400"></i>
+                        <span>Programación Académica</span>
                     </button>
                 </div>
-
             </div>
-        </div>
 
-        <!-- PANEL DE FILTROS Y BÚSQUEDA -->
-        <div class="p-4 sm:p-6 bg-white border-b border-gray-200">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <!-- Búsqueda por texto -->
-                <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Buscar Acción Formativa</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                        <input type="text" id="search-input" onkeyup="filterCourses()" placeholder="Ej. Niñas, Niños, Derechos..." class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-inm-blue focus:border-inm-blue transition-all outline-none">
-                    </div>
+            <!-- FILTROS Y BÚSQUEDA -->
+            <div class="pt-4 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                <!-- Búsqueda General -->
+                <div class="relative w-full sm:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="filterCourses()" placeholder="Buscar curso o tema..." class="w-full pl-10 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-inm-blue/30 focus:border-inm-blue transition-all">
                 </div>
 
-                <!-- Filtro por Eje Temático -->
-                <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Eje Temático</label>
-                    <select id="filter-eje" onchange="filterCourses()" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-inm-blue focus:border-inm-blue transition-all outline-none bg-white">
-                        <option value="">Todos los Ejes Temáticos</option>
-                        <option value="Derechos Humanos">Derechos humanos, vulnerabilidad, convivencia y protección</option>
-                        <option value="Gobernanza Migratoria">Gobernanza y Gestión Migratoria</option>
-                        <option value="Derecho Migratorio">Derecho Migratorio e Institucionalidad</option>
+                <!-- Filtros Dropdowns -->
+                <div class="flex flex-wrap sm:flex-nowrap gap-2 w-full sm:w-auto">
+                    <select id="ejeFilter" onchange="filterCourses()" class="w-full sm:w-auto text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-inm-blue/30 focus:border-inm-blue">
+                        <option value="ALL">Todos los Ejes Temáticos</option>
+                        <option value="Derechos Humanos">Derechos Humanos y Protección</option>
+                        <option value="Gobernanza">Gobernanza y Gestión Migratoria</option>
+                        <option value="Derecho Migratorio">Marco Legal y Normativa</option>
                     </select>
-                </div>
 
-                <!-- Filtro por Modalidad -->
-                <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Modalidad</label>
-                    <select id="filter-modalidad" onchange="filterCourses()" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-inm-blue focus:border-inm-blue transition-all outline-none bg-white">
-                        <option value="">Todas las Modalidades</option>
+                    <select id="modalidadFilter" onchange="filterCourses()" class="w-full sm:w-auto text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-inm-blue/30 focus:border-inm-blue">
+                        <option value="ALL">Todas las Modalidades</option>
                         <option value="Semipresencial">Semipresencial</option>
                         <option value="Autoaprendizaje">Autoaprendizaje</option>
+                        <option value="Virtual Sync">Virtual Sincrónica</option>
                         <option value="Presencial">Presencial</option>
-                        <option value="Virtual Sync">Virtual Sincrónico</option>
                     </select>
-                </div>
-
-                <!-- Botón Limpiar Filtros -->
-                <div class="flex items-end">
-                    <button onclick="resetFilters()" class="w-full py-2 px-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg text-xs transition-all flex items-center justify-center gap-2 border border-gray-300">
-                        <i class="fa-solid fa-rotate-left text-inm-blue"></i> Restablecer Filtros
-                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- ÁREA DE CONTENIDO -->
-        <div class="p-4 sm:p-6">
-
-            <!-- ================= VISTA 1: CATÁLOGO ACADÉMICO (CARDS FLIP) ================= -->
-            <section id="sec-catalogo" class="space-y-6">
-                <div class="flex justify-between items-center border-b pb-3 border-gray-200">
-                    <h3 class="text-sm font-bold text-inm-navy uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group text-inm-blue"></i>
-                        Oferta Formativa Institucional
-                    </h3>
-                    <span id="course-count" class="text-xs bg-inm-blue/10 text-inm-blue font-bold px-3 py-1 rounded-full">Cargando...</span>
-                </div>
-
-                <!-- Grilla de Tarjetas Flip 3D -->
-                <div id="courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Se poblará dinámicamente con JS -->
-                </div>
-            </section>
-
-            <!-- ================= VISTA 2: PROGRAMACIÓN ACADÉMICA ================= -->
-            <section id="sec-programacion" class="space-y-6 hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4 border-gray-200">
-                    <div>
-                        <h3 class="text-sm font-bold text-inm-navy uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-check text-inm-blue"></i>
-                            Programación Trimestral
-                        </h3>
-                        <p class="text-xs text-gray-500">Planificación de acciones formativas ordenadas por período académico.</p>
-                    </div>
-
-                    <!-- Selector de Trimestres -->
-                    <div class="inline-flex rounded-lg border border-gray-200 p-1 bg-white shadow-sm self-start sm:self-auto">
-                        <button onclick="filterSchedule('1Trim2027')" id="btn-period-1" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-md bg-inm-navy text-white transition-all">
-                            1er Trimestre 2027
-                        </button>
-                        <button onclick="filterSchedule('2Trim2027')" id="btn-period-2" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-md text-gray-600 hover:text-inm-navy transition-all">
-                            2do Trimestre 2027
-                        </button>
-                        <button onclick="filterSchedule('Todos')" id="btn-period-all" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-md text-gray-600 hover:text-inm-navy transition-all">
-                            Ver Todos
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Tabla de Programación -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead>
-                                <tr class="bg-inm-navy text-white uppercase text-[11px] tracking-wider">
-                                    <th class="py-3 px-4 font-bold">Período / Fecha</th>
-                                    <th class="py-3 px-4 font-bold">Actividad Formativa</th>
-                                    <th class="py-3 px-4 font-bold">Modalidad</th>
-                                    <th class="py-3 px-4 font-bold">Duración</th>
-                                    <th class="py-3 px-4 font-bold">Público Destinatario</th>
-                                    <th class="py-3 px-4 font-bold text-center">Estado</th>
-                                    <th class="py-3 px-4 font-bold text-center">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="schedule-tbody" class="divide-y divide-gray-100">
-                                <!-- Se poblará con JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
+        <!-- VISTA 1: CATÁLOGO ACADÉMICO (FLIP CARDS) -->
+        <div id="view-catalogo" class="block">
+            <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Se puebla dinámicamente mediante JS -->
+            </div>
+            
+            <!-- Mensaje Sin Resultados -->
+            <div id="no-results" class="hidden text-center py-12 bg-white rounded-xl border border-dashed border-slate-300">
+                <i class="fa-solid fa-graduation-cap text-4xl text-slate-300 mb-3"></i>
+                <h3 class="text-base font-semibold text-slate-700">No se encontraron acciones formativas</h3>
+                <p class="text-xs text-slate-500 mt-1">Intenta ajustar los criterios de búsqueda o filtros.</p>
+            </div>
         </div>
 
-        <!-- PIE INTERNO DEL MÓDULO -->
-        <div class="bg-white px-6 py-3 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center text-[11px] text-gray-500 gap-2">
-            <span><i class="fa-solid fa-graduation-cap text-inm-accent mr-1"></i> Instituto Nacional de Migración (INM RD)</span>
-            <span>Para soporte o consultas: <strong class="text-inm-navy">escuela.academica@inm.gob.do</strong></span>
+        <!-- VISTA 2: PROGRAMACIÓN ACADÉMICA -->
+        <div id="view-programacion" class="hidden space-y-6">
+            <!-- selector de período -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-inm-blue/10 flex items-center justify-center text-inm-blue font-bold">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-inm-navy text-sm sm:text-base">Calendario Académico Programado</h3>
+                        <p class="text-xs text-slate-500">Selecciona el trimestre correspondiente para ver la oferta disponible.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <label for="periodSelect" class="text-xs font-semibold text-slate-600 whitespace-nowrap">Período:</label>
+                    <select id="periodSelect" onchange="renderSchedule()" class="w-full sm:w-auto bg-slate-50 border border-slate-200 rounded-lg text-xs sm:text-sm px-3 py-2 font-medium text-inm-navy focus:outline-none focus:ring-2 focus:ring-inm-blue/30">
+                        <option value="2027-Q1" selected>Primer Trimestre 2027 (Ene - Mar)</option>
+                        <option value="2027-Q2">Segundo Trimestre 2027 (Abr - Jun)</option>
+                        <option value="2027-Q3">Tercer Trimestre 2027 (Jul - Sep)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tabla/Lista de la Programación -->
+            <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200 text-xs font-bold text-inm-navy uppercase tracking-wider">
+                                <th class="py-3.5 px-4 sm:px-6">Actividad / Acción Formativa</th>
+                                <th class="py-3.5 px-4">Modalidad</th>
+                                <th class="py-3.5 px-4">Duración</th>
+                                <th class="py-3.5 px-4">Destinatarios</th>
+                                <th class="py-3.5 px-4">Estado</th>
+                                <th class="py-3.5 px-4 text-right">Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-tbody" class="divide-y divide-slate-100 text-xs sm:text-sm text-slate-700">
+                            <!-- Se puebla dinámicamente por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
     </div>
 
-    <!-- ================= MODAL DETALLES / LANDING PAGE DEL CURSO ================= -->
-    <div id="course-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 transform transition-all my-auto">
+    <!-- MODAL DE DETALLES DEL CURSO (LANDING PAGE MODAL SIN FORMULARIO DE PRE-INSCRIPCIÓN) -->
+    <div id="courseModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 modal-animate relative my-auto">
             
-            <!-- Header Modal -->
-            <div class="bg-inm-navy text-white p-5 sm:p-6 relative border-b-4 border-inm-accent">
-                <button onclick="closeModal()" class="absolute top-4 right-4 text-white/80 hover:text-white bg-black/20 hover:bg-black/40 w-8 h-8 rounded-full flex items-center justify-center transition-all">
-                    <i class="fa-solid fa-xmark text-base"></i>
-                </button>
-                <span id="modal-eje" class="inline-block px-3 py-0.5 bg-inm-accent/20 border border-inm-accent text-inm-accent text-[10px] font-bold rounded-full mb-2 uppercase tracking-wider">
-                    Eje Temático
-                </span>
-                <h3 id="modal-title" class="text-lg sm:text-xl font-bold leading-tight pr-6">Título del Curso</h3>
-                <p id="modal-code" class="text-[11px] text-gray-300 mt-1 font-mono">Código del Curso</p>
-            </div>
+            <!-- Botón Cerrar -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-600 transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
 
-            <!-- Cuerpo Modal (Landing Page) -->
-            <div class="p-5 sm:p-6 space-y-6">
-                
-                <!-- Metadatos Resumen -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 p-3.5 bg-inm-bg rounded-xl border border-blue-100 text-xs">
-                    <div>
-                        <span class="text-gray-500 block text-[10px] uppercase font-bold">Modalidad</span>
-                        <strong id="modal-modalidad" class="text-inm-navy font-bold">Semipresencial</strong>
-                    </div>
-                    <div>
-                        <span class="text-gray-500 block text-[10px] uppercase font-bold">Duración</span>
-                        <strong id="modal-duracion" class="text-inm-navy font-bold">50 Horas</strong>
-                    </div>
-                    <div class="col-span-2 sm:col-span-1">
-                        <span class="text-gray-500 block text-[10px] uppercase font-bold">Público Destinatario</span>
-                        <strong id="modal-publico" class="text-inm-navy font-bold">Abierto al público</strong>
+            <!-- Encabezado Modal -->
+            <div class="bg-inm-navy text-white p-6 sm:p-8 rounded-t-2xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-inm-blue/30 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative z-10">
+                    <span id="modal-eje" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-inm-accent/20 text-inm-accent border border-inm-accent/30 mb-3">
+                        Eje Temático
+                    </span>
+                    <h2 id="modal-title" class="text-xl sm:text-2xl font-bold text-white leading-tight mb-4">
+                        Nombre de la Acción Formativa
+                    </h2>
+
+                    <!-- Badges Resumen -->
+                    <div class="flex flex-wrap gap-4 text-xs sm:text-sm text-slate-200 pt-2 border-t border-slate-700/60">
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-laptop-house text-inm-accent"></i>
+                            <span id="modal-modalidad">Modalidad</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock text-inm-accent"></i>
+                            <span id="modal-duracion">Duración</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-users text-inm-accent"></i>
+                            <span id="modal-publico">Público Destinatario</span>
+                        </div>
                     </div>
                 </div>
+            </div>
 
+            <!-- Cuerpo del Modal (Información Académica) -->
+            <div class="p-6 sm:p-8 space-y-6">
+                
                 <!-- Objetivo General -->
                 <div>
-                    <h4 class="text-xs font-bold text-inm-navy uppercase tracking-wider mb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-bullseye text-inm-blue"></i> Objetivo General
-                    </h4>
-                    <p id="modal-objetivo" class="text-xs sm:text-sm text-gray-700 leading-relaxed bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-inm-blue mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye"></i>
+                        Objetivo General
+                    </h3>
+                    <p id="modal-objetivo" class="text-slate-600 text-sm leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
                         Cargando objetivo...
                     </p>
                 </div>
 
-                <!-- Módulos Curriculares -->
+                <!-- Contenido / Módulos -->
                 <div>
-                    <h4 class="text-xs font-bold text-inm-navy uppercase tracking-wider mb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-inm-blue"></i> Estructura Curricular / Módulos
-                    </h4>
-                    <div id="modal-modulos" class="space-y-2 text-xs">
-                        <!-- Módulos cargados dinámicamente -->
-                    </div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-inm-blue mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check"></i>
+                        Estructura Modular del Programa
+                    </h3>
+                    <ul id="modal-modules" class="space-y-2 text-sm text-slate-700">
+                        <!-- Módulos cargados por JS -->
+                    </ul>
                 </div>
 
                 <!-- Requisitos y Certificación -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
-                        <h5 class="font-bold text-amber-900 mb-1 flex items-center gap-1">
-                            <i class="fa-solid fa-certificate text-amber-600"></i> Certificación Oficial
-                        </h5>
-                        <p class="text-amber-800 text-[11px]">Emitida por el Instituto Nacional de Migración (INM RD) al cumplir el 80% de participación y evaluación apróbatoria.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                        <h4 class="text-xs font-bold text-inm-navy mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-id-card text-inm-blue"></i>
+                            Requisitos de Ingreso
+                        </h4>
+                        <p id="modal-requisitos" class="text-xs text-slate-600">Servidores públicos, profesionales del área o público general interesado.</p>
                     </div>
-                    <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl">
-                        <h5 class="font-bold text-blue-900 mb-1 flex items-center gap-1">
-                            <i class="fa-solid fa-user-check text-blue-600"></i> Requisitos
-                        </h5>
-                        <p class="text-blue-800 text-[11px]">Copia de documento de identidad, síntesis curricular y completar la solicitud de inscripción.</p>
-                    </div>
-                </div>
 
-                <!-- Formulario de Pre-Registro -->
-                <div class="border-t pt-4 border-gray-200">
-                    <h4 class="text-xs font-bold text-inm-navy uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-pen-to-square text-inm-blue"></i> Formulario de Pre-Inscripción
-                    </h4>
-                    <form id="pre-reg-form" onsubmit="handleRegistration(event)" class="space-y-3">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <input type="text" placeholder="Nombre y Apellidos" required class="w-full px-3 py-2 text-xs border rounded-lg focus:ring-1 focus:ring-inm-blue outline-none">
-                            <input type="email" placeholder="Correo Electrónico" required class="w-full px-3 py-2 text-xs border rounded-lg focus:ring-1 focus:ring-inm-blue outline-none">
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <input type="text" placeholder="Institución / Empresa" required class="w-full px-3 py-2 text-xs border rounded-lg focus:ring-1 focus:ring-inm-blue outline-none">
-                            <input type="tel" placeholder="Teléfono de Contacto" required class="w-full px-3 py-2 text-xs border rounded-lg focus:ring-1 focus:ring-inm-blue outline-none">
-                        </div>
-                        <button type="submit" class="w-full py-2.5 bg-inm-navy hover:bg-inm-blue text-white font-bold text-xs rounded-lg transition-all shadow flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-paper-plane"></i> Enviar Solicitud de Pre-Inscripción
-                        </button>
-                    </form>
-                    <div id="form-feedback" class="hidden mt-3 p-3 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-medium text-center">
-                        <i class="fa-solid fa-circle-check mr-1"></i> ¡Solicitud enviada exitosamente! El equipo del INM RD se pondrá en contacto con usted.
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                        <h4 class="text-xs font-bold text-inm-navy mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-award text-inm-blue"></i>
+                            Certificación Expedida
+                        </h4>
+                        <p class="text-xs text-slate-600">Certificado oficial emitido por el Instituto Nacional de Migración (INM RD).</p>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Footer Modal -->
-            <div class="bg-gray-50 px-6 py-3 rounded-b-2xl border-t border-gray-200 flex justify-end">
-                <button onclick="closeModal()" class="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold text-xs rounded-lg transition-all">
+            <!-- Footer del Modal -->
+            <div class="bg-slate-50 px-6 sm:px-8 py-4 border-t border-slate-200 rounded-b-2xl flex justify-end">
+                <button onclick="closeModal()" class="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 text-sm font-semibold transition-colors">
                     Cerrar
                 </button>
             </div>
+
         </div>
     </div>
 
-
-    <!-- JAVASCRIPT Y DATOS DEL CATÁLOGO -->
+    <!-- SCRIPT LÓGICA DE DATO Y NAVEGACIÓN -->
     <script>
-        // DATOS DE CURSOS Y ACCIONES FORMATIVAS DE INM RD
+        // BASE DE DATOS DE CURSOS
         const coursesData = [
             {
                 id: 'ce-dnnam',
                 code: 'CE-DNNAM',
-                title: 'Curso especializado: Derechos de Niñas, Niños y Adolescentes en Movilidad',
+                title: 'Curso Especializado: Derechos de Niñas, Niños y Adolescentes en Movilidad',
                 eje: 'Derechos Humanos',
-                ejeFull: 'Derechos humanos, vulnerabilidad, convivencia y protección',
+                ejeLabel: 'Derechos humanos, vulnerabilidad, convivencia y protección',
                 modalidad: 'Semipresencial y autoaprendizaje',
+                modalidadKey: 'Semipresencial',
                 duracion: '50 horas por modalidad',
-                publico: 'Abierto al público',
+                publico: 'Abierto al público / Servidores públicos y sociedad civil',
                 objetivo: 'Aumentar las capacidades de servidores públicos, membresía de organizaciones de la sociedad civil y comunitarias/os, en materia de derechos humanos, políticas públicas y de protección de la niñez y adolescencia en movilidad en la República Dominicana, a través del uso de herramientas adecuadas, que les permitan intervenir oportunamente en situaciones cotidianas.',
                 modulos: [
-                    'Módulo I: Marco Jurídico Internacional y Nacional de Protección de la Niñez en Movilidad.',
-                    'Módulo II: Vulnerabilidades específicas y enfoque de género en áreas de frontera.',
-                    'Módulo III: Protocolos de Restitución de Derechos y Detección Temprana.',
-                    'Módulo IV: Herramientas comunitarias de intervención y canalización.'
+                    'Módulo I: Marco Conceptual y Jurídico de la Niñez y Adolescencia en Movilidad',
+                    'Módulo II: Políticas Públicas de Protección en República Dominicana',
+                    'Módulo III: Herramientas de Intervención Oportuna y Protocolos de Actuación',
+                    'Módulo IV: Enfoque de Género y Vulnerabilidades Múltiples'
                 ],
-                periodo: '1Trim2027',
-                fecha: '15 Feb - 28 Mar 2027',
-                estado: 'Inscripciones Abiertas'
+                schedule: [
+                    { period: '2027-Q1', dates: '15 Feb - 20 Mar 2027', status: 'Convocatoria Abierta', modality: 'Semipresencial' },
+                    { period: '2027-Q2', dates: '10 May - 15 Jun 2027', status: 'Programado', modality: 'Autoaprendizaje' }
+                ]
             },
             {
-                id: 'ce-gmrd',
-                code: 'CE-GMRD',
-                title: 'Curso de Gobernanza y Gestión Migratoria en la República Dominicana',
-                eje: 'Gobernanza Migratoria',
-                ejeFull: 'Gobernanza y Gestión Migratoria',
-                modalidad: 'Semipresencial',
-                duracion: '60 horas',
-                publico: 'Servidores públicos y administradores institucionales',
-                objetivo: 'Proporcionar una visión integral de las políticas públicas migratorias, dinamismo fronterizo y gobernanza de la gestión migratoria conforme a las directrices de los organismos internacionales y las leyes dominicanas vigentes.',
-                modulos: [
-                    'Módulo I: Fundamentos de la Gobernanza Migratoria Global.',
-                    'Módulo II: Política Migratoria Dominicana y Gestión de Fronteras.',
-                    'Módulo III: Acuerdos Multilaterales y Cooperación Internacional.',
-                    'Módulo IV: Tecnologías aplicadas a la gestión de flujos poblacionales.'
-                ],
-                periodo: '1Trim2027',
-                fecha: '01 Mar - 15 Abr 2027',
-                estado: 'Inscripciones Abiertas'
-            },
-            {
-                id: 'dt-dmip',
-                code: 'DT-DMIP',
-                title: 'Diplomado en Derecho Migratorio e Institucionalidad Dominicana',
-                eje: 'Derecho Migratorio',
-                ejeFull: 'Derecho Migratorio e Institucionalidad',
-                modalidad: 'Presencial',
-                duracion: '90 horas',
-                publico: 'Abogados, juristas y personal consular',
-                objetivo: 'Capacitar analíticamente en la aplicación de la Ley General de Migración No. 285-04, sus reglamentos, procedimientos administrativos de regularización y debido proceso en la actuación de los organismos de control.',
-                modulos: [
-                    'Módulo I: Ley No. 285-04 y su Reglamento de Aplicación.',
-                    'Módulo II: Estatus de Permanencia y Procedimientos Visa/Residencias.',
-                    'Módulo III: Debido Proceso, Recursos Administrativos y Tutela Judicial.',
-                    'Módulo IV: Análisis Comparado del Derecho Migratorio Regional.'
-                ],
-                periodo: '2Trim2027',
-                fecha: '10 May - 15 Jul 2027',
-                estado: 'Próximamente'
-            },
-            {
-                id: 'ta-amts',
-                code: 'TA-AMTS',
-                title: 'Taller: Atención Multidisciplinaria a Víctimas de Trata y Tráfico Ilícito',
-                eje: 'Derechos Humanos',
-                ejeFull: 'Derechos humanos, vulnerabilidad, convivencia y protección',
-                modalidad: 'Autoaprendizaje',
-                duracion: '30 horas',
-                publico: 'Abierto al público y personal de socorro',
-                objetivo: 'Instruir en la identificación precoz de indicadores de trata de personas y tráfico ilícito de migrantes, garantizando el principio de no revictimización y articulación de la red de respuesta institucional.',
-                modulos: [
-                    'Módulo I: Conceptos clave y diferencia entre Trata y Tráfico.',
-                    'Módulo II: Indicadores de Riesgo y Detección de Víctimas.',
-                    'Módulo III: Primeros Auxilios Psicológicos y Ruta de Referencia.'
-                ],
-                periodo: '1Trim2027',
-                fecha: 'Permanente',
-                estado: 'Inscripciones Abiertas'
-            },
-            {
-                id: 'ce-estadistica',
-                code: 'CE-ESTAD',
-                title: 'Curso: Análisis de Datos Estadísticos sobre Flujos Migratorios',
-                eje: 'Gobernanza Migratoria',
-                ejeFull: 'Gobernanza y Gestión Migratoria',
+                id: 'dip-gm',
+                code: 'DIP-GM',
+                title: 'Diplomado en Gestión y Gobernanza Migratoria Caribeña',
+                eje: 'Gobernanza',
+                ejeLabel: 'Gobernanza, gestión migratoria y desarrollo',
                 modalidad: 'Virtual Sync',
-                duracion: '40 horas',
-                publico: 'Analistas, investigadores y académicos',
-                objetivo: 'Desarrollar competencias técnicas para el procesamiento, análisis e interpretación de datos cualitativos y cuantitativos relacionados con la movilidad humana en la región del Caribe.',
+                modalidadKey: 'Virtual Sync',
+                duracion: '90 horas académicas',
+                publico: 'Funcionarios gubernamentales, diplomáticos e investigadores',
+                objetivo: 'Fortalecer las competencias analíticas e institucionales para el diseño e implementación de políticas migratorias alineadas con los estándares internacionales y los objetivos del Pacto Mundial para la Migración.',
                 modulos: [
-                    'Módulo I: Fuentes de Datos Migratorios y Metodología del INM.',
-                    'Módulo II: Indicadores Demográficos y Mercado Laboral.',
-                    'Módulo III: Elaboración de Informes Técnicos de Coyuntura.'
+                    'Módulo I: Tendencias Migratorias en la Región del Caribe',
+                    'Módulo II: Gobernanza Multilateral y Acuerdos Internacionales',
+                    'Módulo III: Integración Económica, Mercado Laboral y Desarrollo'
                 ],
-                periodo: '2Trim2027',
-                fecha: '01 Jun - 30 Jun 2027',
-                estado: 'Próximamente'
+                schedule: [
+                    { period: '2027-Q1', dates: '01 Mar - 30 Abr 2027', status: 'Inscripciones Próximas', modality: 'Virtual Sync' }
+                ]
+            },
+            {
+                id: 'tall-dlm',
+                code: 'TALL-DLM',
+                title: 'Taller: Aplicación Práctica de la Ley General de Migración 285-04',
+                eje: 'Derecho Migratorio',
+                ejeLabel: 'Marco legal, normativa e inspección migratoria',
+                modalidad: 'Presencial',
+                modalidadKey: 'Presencial',
+                duracion: '20 horas lectivas',
+                publico: 'Inspectores, abogados, personal de fronteras y RRHH',
+                objetivo: 'Dotar a los participantes de un conocimiento exhaustivo sobre los procedimientos administrativos, estatus de permanencia y régimen sancionatorio de la legislación migratoria dominicana.',
+                modulos: [
+                    'Módulo I: Categorías y Subcategorías Migratorias',
+                    'Módulo II: Procesos de Regularización e Inspección',
+                    'Módulo III: Jurisprudencia y Resoluciones Recientes'
+                ],
+                schedule: [
+                    { period: '2027-Q1', dates: '10 Ene - 25 Ene 2027', status: 'Cupos Limitados', modality: 'Presencial' },
+                    { period: '2027-Q3', dates: '05 Jul - 20 Jul 2027', status: 'Programado', modality: 'Presencial' }
+                ]
+            },
+            {
+                id: 'ce-tiyp',
+                code: 'CE-TIYP',
+                title: 'Curso Especializado: Detección e Intervención en Trata de Personas',
+                eje: 'Derechos Humanos',
+                ejeLabel: 'Derechos humanos, vulnerabilidad, convivencia y protección',
+                modalidad: 'Semipresencial',
+                modalidadKey: 'Semipresencial',
+                duracion: '40 horas',
+                publico: 'Personal de seguridad, personal de salud y organizaciones sociales',
+                objetivo: 'Proporcionar pautas metodológicas e indicadores clave para la rápida identificación y asistencia oportuna a víctimas del delito de trata de personas y tráfico ilícito de migrantes.',
+                modulos: [
+                    'Módulo I: Marco Legal Internacional y Ley 137-03',
+                    'Módulo II: Indicadores de Identificación Temprana',
+                    'Módulo III: Protocolos de Protección y Asistencia Víctima'
+                ],
+                schedule: [
+                    { period: '2027-Q2', dates: '01 Abr - 30 Abr 2027', status: 'Programado', modality: 'Semipresencial' }
+                ]
             }
         ];
 
-        // RENDERIZAR VISTA CATÁLOGO (CARDS FLIP)
-        function renderCourses(courses) {
-            const grid = document.getElementById('courses-grid');
-            const countLabel = document.getElementById('course-count');
+        // RENDERIZAR TARJETAS EN VISTA CATÁLOGO
+        function renderCatalog(courses) {
+            const grid = document.getElementById('catalog-grid');
+            const noResults = document.getElementById('no-results');
             grid.innerHTML = '';
 
-            countLabel.textContent = `${courses.length} Acción(es) Formativa(s)`;
-
             if (courses.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full bg-white p-8 rounded-xl text-center border border-gray-200">
-                        <i class="fa-solid fa-folder-open text-gray-300 text-4xl mb-3"></i>
-                        <p class="text-gray-600 font-medium text-xs">No se encontraron cursos con los filtros seleccionados.</p>
-                        <button onclick="resetFilters()" class="mt-3 px-4 py-1.5 bg-inm-blue text-white rounded-lg text-xs font-semibold hover:bg-inm-navy transition-all">
-                            Limpiar Filtros
-                        </button>
-                    </div>
-                `;
+                noResults.classList.remove('hidden');
                 return;
+            } else {
+                noResults.classList.add('hidden');
             }
 
             courses.forEach(course => {
-                const cardHtml = `
-                    <div class="flip-card h-[380px] perspective-1000 group">
-                        <div class="flip-card-inner border border-gray-200 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
+                const cardHTML = `
+                    <div class="group h-[380px] perspective-1000 w-full">
+                        <div class="relative w-full h-full transform-style-3d group-hover:rotate-y-180 shadow-md hover:shadow-xl rounded-2xl transition-all duration-500 border border-slate-200/80">
                             
-                            <!-- PARTE FRONTAL DE LA TARJETA -->
-                            <div class="flip-card-front bg-white p-5 flex flex-col justify-between border-t-4 border-inm-navy">
+                            <!-- PARTE FRONTAL DE LA CARD (Color claro, datos principales) -->
+                            <div class="absolute inset-0 w-full h-full bg-white rounded-2xl p-6 flex flex-col justify-between backface-hidden border-t-4 border-inm-blue">
                                 <div>
-                                    <!-- Badge Eje Temático -->
-                                    <div class="mb-2.5">
-                                        <span class="inline-block px-2.5 py-0.5 bg-inm-bg text-inm-navy border border-inm-blue/20 text-[10px] font-bold rounded uppercase tracking-wider line-clamp-1">
+                                    <!-- Eje Temático Badge -->
+                                    <div class="flex items-center justify-between gap-2 mb-3">
+                                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-inm-blue border border-slate-200 line-clamp-1">
                                             ${course.eje}
                                         </span>
+                                        <span class="text-[10px] font-semibold tracking-wider text-slate-400 uppercase">${course.code}</span>
                                     </div>
 
-                                    <!-- Título del Curso -->
-                                    <h4 class="text-sm font-bold text-inm-navy mb-1 line-clamp-3 leading-snug">
+                                    <!-- Nombre del Curso -->
+                                    <h3 class="font-bold text-inm-navy text-base leading-snug mb-3 group-hover:text-inm-blue transition-colors">
                                         ${course.title}
-                                    </h4>
-
-                                    <p class="text-[10px] text-gray-400 font-mono mb-4">${course.code}</p>
-
-                                    <!-- Datos Clave (Badges Frontales) -->
-                                    <div class="space-y-2 text-xs">
-                                        <div class="flex items-start gap-2 text-gray-600">
-                                            <i class="fa-solid fa-laptop-house text-inm-blue mt-0.5 w-4 text-center"></i>
-                                            <span><strong>Modalidad:</strong> ${course.modalidad}</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-gray-600">
-                                            <i class="fa-solid fa-clock text-inm-blue w-4 text-center"></i>
-                                            <span><strong>Duración:</strong> ${course.duracion}</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-gray-600">
-                                            <i class="fa-solid fa-users text-inm-blue w-4 text-center"></i>
-                                            <span><strong>Público:</strong> ${course.publico}</span>
-                                        </div>
-                                    </div>
+                                    </h3>
                                 </div>
 
-                                <!-- Indicador Visual para Voltear -->
-                                <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-[11px] text-inm-blue font-semibold">
-                                    <span class="flex items-center gap-1"><i class="fa-solid fa-rotate text-inm-accent"></i> Pasa el mouse para ver objetivo</span>
-                                    <i class="fa-solid fa-arrow-right text-gray-300 group-hover:translate-x-1 transition-transform"></i>
+                                <!-- Metadata Footer Front side -->
+                                <div class="space-y-2.5 pt-4 border-t border-slate-100">
+                                    <div class="flex items-center text-xs text-slate-600 gap-2.5">
+                                        <i class="fa-solid fa-laptop-house text-inm-blue w-4 text-center"></i>
+                                        <span class="font-medium">Modalidad:</span>
+                                        <span class="text-slate-800 font-semibold truncate">${course.modalidad}</span>
+                                    </div>
+
+                                    <div class="flex items-center text-xs text-slate-600 gap-2.5">
+                                        <i class="fa-regular fa-clock text-inm-blue w-4 text-center"></i>
+                                        <span class="font-medium">Duración:</span>
+                                        <span class="text-slate-800 font-semibold">${course.duracion}</span>
+                                    </div>
+
+                                    <div class="flex items-center text-xs text-slate-600 gap-2.5">
+                                        <i class="fa-solid fa-user-group text-inm-blue w-4 text-center"></i>
+                                        <span class="font-medium">Público:</span>
+                                        <span class="text-slate-800 font-semibold truncate">${course.publico}</span>
+                                    </div>
+
+                                    <div class="pt-2 text-center text-[11px] font-bold text-inm-blue flex items-center justify-center gap-1.5 text-slate-400 group-hover:text-inm-blue">
+                                        <span>Pasa el mouse para ver objetivos</span>
+                                        <i class="fa-solid fa-rotate text-xs"></i>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- PARTE TRASERA DE LA TARJETA -->
-                            <div class="flip-card-back bg-gradient-to-br from-inm-navy to-inm-blue text-white p-5 flex flex-col justify-between border-t-4 border-inm-accent shadow-inner">
+                            <!-- PARTE TRASERA DE LA CARD (Se gira al pasar el mouse, muestra objetivos) -->
+                            <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-inm-navy via-inm-blue to-slate-900 rounded-2xl p-6 text-white rotate-y-180 backface-hidden flex flex-col justify-between">
                                 <div>
-                                    <span class="text-[10px] text-inm-accent font-bold uppercase tracking-widest block mb-1">Objetivo General</span>
-                                    <h5 class="text-xs font-bold text-white mb-2 line-clamp-2">${course.title}</h5>
-                                    
-                                    <p class="text-xs text-gray-200 leading-relaxed line-clamp-6 bg-white/10 p-3 rounded-lg border border-white/10">
+                                    <div class="flex items-center justify-between border-b border-slate-700/80 pb-2 mb-3">
+                                        <span class="text-xs font-bold text-inm-accent uppercase tracking-wider">Objetivo General</span>
+                                        <i class="fa-solid fa-bullseye text-inm-accent"></i>
+                                    </div>
+                                    <p class="text-xs leading-relaxed text-slate-200 line-clamp-6">
                                         "${course.objetivo}"
                                     </p>
                                 </div>
 
-                                <div class="space-y-2 pt-2">
-                                    <div class="text-[10px] text-gray-300 flex justify-between items-center">
-                                        <span><i class="fa-solid fa-calendar-check text-inm-accent"></i> ${course.fecha}</span>
-                                        <span class="bg-inm-accent/20 text-inm-accent px-2 py-0.5 rounded font-semibold">${course.estado}</span>
+                                <div class="pt-4 border-t border-slate-700/80 space-y-3">
+                                    <div class="flex items-center justify-between text-[11px] text-slate-300">
+                                        <span>Certificación Oficial</span>
+                                        <i class="fa-solid fa-circle-check text-emerald-400"></i>
                                     </div>
                                     
-                                    <!-- Botón para ver la Landing completa del curso -->
-                                    <button onclick="openModal('${course.id}')" class="w-full py-2 px-3 bg-inm-accent hover:bg-yellow-600 text-inm-navy font-bold text-xs rounded-lg transition-all shadow flex items-center justify-center gap-2">
-                                        <i class="fa-solid fa-circle-info"></i> Ver Landing Page del Curso
+                                    <button onclick="openModal('${course.id}')" class="w-full py-2.5 px-4 bg-inm-accent hover:bg-amber-600 text-inm-navy font-bold rounded-lg text-xs transition-colors flex items-center justify-center gap-2 shadow-lg">
+                                        <span>Ver Detalle Completo</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
                                     </button>
                                 </div>
                             </div>
@@ -539,194 +468,149 @@
                         </div>
                     </div>
                 `;
-                grid.innerHTML += cardHtml;
+                grid.innerHTML += cardHTML;
             });
         }
 
         // RENDERIZAR TABLA DE PROGRAMACIÓN ACADÉMICA
-        function renderSchedule(filterPeriod = '1Trim2027') {
+        function renderSchedule() {
+            const period = document.getElementById('periodSelect').value;
             const tbody = document.getElementById('schedule-tbody');
             tbody.innerHTML = '';
 
-            const filtered = filterPeriod === 'Todos' 
-                ? coursesData 
-                : coursesData.filter(c => c.periodo === filterPeriod);
+            let count = 0;
+            coursesData.forEach(course => {
+                const matchSchedule = course.schedule.find(s => s.period === period);
+                if (matchSchedule) {
+                    count++;
+                    const row = `
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-4 px-4 sm:px-6">
+                                <div class="font-bold text-inm-navy mb-0.5">${course.title}</div>
+                                <div class="text-xs text-slate-400 font-mono">${course.code} • ${course.eje}</div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <span class="inline-block px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                                    ${matchSchedule.modality}
+                                </span>
+                            </td>
+                            <td class="py-4 px-4 font-medium text-slate-600">${course.duracion}</td>
+                            <td class="py-4 px-4 text-slate-600 max-w-[200px] truncate">${course.publico}</td>
+                            <td class="py-4 px-4">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${
+                                    matchSchedule.status.includes('Abierta') ? 'bg-emerald-100 text-emerald-800' : 
+                                    matchSchedule.status.includes('Cupos') ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'
+                                }">
+                                    <span class="w-1.5 h-1.5 rounded-full ${
+                                        matchSchedule.status.includes('Abierta') ? 'bg-emerald-500 animate-pulse' : 'bg-blue-500'
+                                    }"></span>
+                                    ${matchSchedule.status}
+                                </span>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <button onclick="openModal('${course.id}')" class="px-3 py-1.5 bg-inm-navy hover:bg-inm-blue text-white rounded-md text-xs font-semibold transition-colors">
+                                    Ver Detalle
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                }
+            });
 
-            if (filtered.length === 0) {
+            if (count === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="py-6 text-center text-gray-500 text-xs">
-                            No hay actividades programadas para el período seleccionado.
+                        <td colspan="6" class="text-center py-8 text-slate-400 text-xs">
+                            No hay actividades programadas registradas para el período seleccionado.
                         </td>
                     </tr>
                 `;
-                return;
-            }
-
-            filtered.forEach(course => {
-                const badgeColor = course.estado === 'Inscripciones Abiertas' 
-                    ? 'bg-emerald-100 text-emerald-800 border-emerald-300' 
-                    : 'bg-amber-100 text-amber-800 border-amber-300';
-
-                const row = `
-                    <tr class="hover:bg-blue-50/50 transition-colors">
-                        <td class="py-3 px-4 font-semibold text-inm-navy">
-                            <div class="text-xs">${course.fecha}</div>
-                            <span class="text-[10px] text-gray-400 font-mono">${course.periodo === '1Trim2027' ? 'Ene - Mar 2027' : 'Abr - Jun 2027'}</span>
-                        </td>
-                        <td class="py-3 px-4 max-w-xs">
-                            <p class="font-bold text-inm-navy text-xs leading-snug">${course.title}</p>
-                            <span class="text-[10px] text-gray-500">${course.eje}</span>
-                        </td>
-                        <td class="py-3 px-4 text-xs text-gray-600">${course.modalidad}</td>
-                        <td class="py-3 px-4 text-xs text-gray-600">${course.duracion}</td>
-                        <td class="py-3 px-4 text-xs text-gray-600">${course.publico}</td>
-                        <td class="py-3 px-4 text-center">
-                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${badgeColor}">
-                                ${course.estado}
-                            </span>
-                        </td>
-                        <td class="py-3 px-4 text-center">
-                            <button onclick="openModal('${course.id}')" class="px-3 py-1 bg-inm-navy hover:bg-inm-blue text-white text-xs font-semibold rounded-lg transition-all shadow-sm flex items-center gap-1 mx-auto">
-                                <i class="fa-solid fa-eye"></i> Ficha
-                            </button>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
-        }
-
-        // CAMBIAR PESTAÑAS (Catálogo / Programación)
-        function switchTab(tab) {
-            const tabCat = document.getElementById('tab-catalogo');
-            const tabProg = document.getElementById('tab-programacion');
-            const secCat = document.getElementById('sec-catalogo');
-            const secProg = document.getElementById('sec-programacion');
-            const moduleTitle = document.getElementById('module-title');
-            const moduleSubtitle = document.getElementById('module-subtitle');
-
-            if (tab === 'catalogo') {
-                tabCat.className = "tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 bg-inm-accent text-inm-navy font-bold shadow";
-                tabProg.className = "tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-white hover:bg-white/10";
-                
-                secCat.classList.remove('hidden');
-                secProg.classList.add('hidden');
-
-                moduleTitle.textContent = "Catálogo Académico";
-                moduleSubtitle.textContent = "Explora los ejes temáticos, cursos, diplomados y talleres del Instituto Nacional de Migración.";
-            } else {
-                tabProg.className = "tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 bg-inm-accent text-inm-navy font-bold shadow";
-                tabCat.className = "tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-white hover:bg-white/10";
-                
-                secProg.classList.remove('hidden');
-                secCat.classList.add('hidden');
-
-                moduleTitle.textContent = "Programación Académica";
-                moduleSubtitle.textContent = "Planificación trimestral de actividades formativas previstas de la Escuela Nacional de Migración.";
-                renderSchedule('1Trim2027');
             }
         }
 
-        // LÓGICA DE FILTRADO
+        // FILTRADO DINÁMICO
         function filterCourses() {
-            const searchVal = document.getElementById('search-input').value.toLowerCase();
-            const ejeVal = document.getElementById('filter-eje').value;
-            const modalidadVal = document.getElementById('filter-modalidad').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const eje = document.getElementById('ejeFilter').value;
+            const modalidad = document.getElementById('modalidadFilter').value;
 
-            const filtered = coursesData.filter(course => {
-                const matchesSearch = course.title.toLowerCase().includes(searchVal) || 
-                                      course.objetivo.toLowerCase().includes(searchVal) ||
-                                      course.code.toLowerCase().includes(searchVal);
+            const filtered = coursesData.filter(c => {
+                const matchesSearch = c.title.toLowerCase().includes(search) || 
+                                      c.code.toLowerCase().includes(search) ||
+                                      c.objetivo.toLowerCase().includes(search);
                 
-                const matchesEje = ejeVal === '' || course.eje.includes(ejeVal);
-                const matchesModalidad = modalidadVal === '' || course.modalidad.includes(modalidadVal);
+                const matchesEje = (eje === 'ALL') || c.eje === eje;
+                const matchesModalidad = (modalidad === 'ALL') || c.modalidad.includes(modalidad);
 
                 return matchesSearch && matchesEje && matchesModalidad;
             });
 
-            renderCourses(filtered);
+            renderCatalog(filtered);
         }
 
-        function resetFilters() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('filter-eje').value = '';
-            document.getElementById('filter-modalidad').value = '';
-            renderCourses(coursesData);
-        }
+        // CAMBIO ENTRE PESTAÑAS (Catálogo / Programación)
+        function switchView(view) {
+            const catView = document.getElementById('view-catalogo');
+            const progView = document.getElementById('view-programacion');
+            const tabCat = document.getElementById('tab-catalogo');
+            const tabProg = document.getElementById('tab-programacion');
 
-        // FILTRADO DE PERIODOS EN PROGRAMACIÓN
-        function filterSchedule(period) {
-            document.querySelectorAll('.period-btn').forEach(btn => {
-                btn.className = "period-btn px-3 py-1.5 text-xs font-semibold rounded-md text-gray-600 hover:text-inm-navy transition-all";
-            });
-
-            if (period === '1Trim2027') {
-                document.getElementById('btn-period-1').className = "period-btn px-3 py-1.5 text-xs font-semibold rounded-md bg-inm-navy text-white transition-all";
-            } else if (period === '2Trim2027') {
-                document.getElementById('btn-period-2').className = "period-btn px-3 py-1.5 text-xs font-semibold rounded-md bg-inm-navy text-white transition-all";
+            if (view === 'catalogo') {
+                catView.classList.remove('hidden');
+                progView.classList.add('hidden');
+                
+                tabCat.className = 'flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 bg-white text-inm-navy shadow-sm';
+                tabProg.className = 'flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 text-slate-600 hover:text-inm-navy';
             } else {
-                document.getElementById('btn-period-all').className = "period-btn px-3 py-1.5 text-xs font-semibold rounded-md bg-inm-navy text-white transition-all";
-            }
+                catView.classList.add('hidden');
+                progView.classList.remove('hidden');
 
-            renderSchedule(period);
+                tabProg.className = 'flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 bg-white text-inm-navy shadow-sm';
+                tabCat.className = 'flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 text-slate-600 hover:text-inm-navy';
+
+                renderSchedule();
+            }
         }
 
-        // MODAL DETALLES / LANDING
+        // ABRIR MODAL / LANDING DE CURSO
         function openModal(courseId) {
             const course = coursesData.find(c => c.id === courseId);
             if (!course) return;
 
-            document.getElementById('modal-eje').textContent = course.ejeFull;
-            document.getElementById('modal-title').textContent = course.title;
-            document.getElementById('modal-code').textContent = `CÓDIGO INSTITUCIONAL: ${course.code}`;
-            document.getElementById('modal-modalidad').textContent = course.modalidad;
-            document.getElementById('modal-duracion').textContent = course.duracion;
-            document.getElementById('modal-publico').textContent = course.publico;
-            document.getElementById('modal-objetivo').textContent = course.objetivo;
+            document.getElementById('modal-title').innerText = course.title;
+            document.getElementById('modal-eje').innerText = course.ejeLabel;
+            document.getElementById('modal-modalidad').innerText = course.modalidad;
+            document.getElementById('modal-duracion').innerText = course.duracion;
+            document.getElementById('modal-publico').innerText = course.publico;
+            document.getElementById('modal-objetivo').innerText = course.objetivo;
 
-            // Módulos
-            const modulosContainer = document.getElementById('modal-modulos');
-            modulosContainer.innerHTML = '';
-            course.modulos.forEach(m => {
-                modulosContainer.innerHTML += `
-                    <div class="p-2.5 bg-gray-50 rounded-lg border border-gray-200 flex items-center gap-2 text-gray-700">
-                        <i class="fa-solid fa-check-circle text-inm-blue text-xs"></i>
-                        <span>${m}</span>
-                    </div>
+            // Render módulos
+            const modulesContainer = document.getElementById('modal-modules');
+            modulesContainer.innerHTML = '';
+            course.modulos.forEach(mod => {
+                modulesContainer.innerHTML += `
+                    <li class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                        <i class="fa-solid fa-circle-check text-inm-blue mt-0.5 text-xs"></i>
+                        <span class="font-medium text-slate-700">${mod}</span>
+                    </li>
                 `;
             });
 
-            // Restablecer formulario
-            document.getElementById('pre-reg-form').reset();
-            document.getElementById('form-feedback').classList.add('hidden');
-
-            document.getElementById('course-modal').classList.remove('hidden');
+            document.getElementById('courseModal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
+        // CERRAR MODAL
         function closeModal() {
-            document.getElementById('course-modal').classList.add('hidden');
+            document.getElementById('courseModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
 
-        function handleRegistration(e) {
-            e.preventDefault();
-            const feedback = document.getElementById('form-feedback');
-            feedback.classList.remove('hidden');
-            document.getElementById('pre-reg-form').reset();
-        }
-
-        window.onclick = function(event) {
-            const modal = document.getElementById('course-modal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        };
-
-        window.onload = function() {
-            renderCourses(coursesData);
-        };
+        // INICIALIZACIÓN
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCatalog(coursesData);
+        });
     </script>
 </body>
 </html>
